@@ -82,6 +82,6 @@ async def delete_address_by_id(id: int, db: Session = Depends(get_db), user_data
 
 
 @router.get('/get-join/{id}', status_code=status.HTTP_200_OK)
-def get_address_by_user_id(id: int, db: Session = Depends(get_db)):
+def get_address_by_user_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth2.get_user)):
     join = db.query(Address, User).join(User).filter(Address.user_id == id).all()
     return join
