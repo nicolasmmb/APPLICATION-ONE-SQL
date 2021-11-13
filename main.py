@@ -7,6 +7,8 @@ from app.routes import user, address, auth
 from app.utils import endpoints
 # AUTH0
 from fastapi.security import HTTPBearer
+###
+from starlette.responses import FileResponse
 
 
 app = FastAPI()
@@ -26,6 +28,11 @@ app.include_router(user.router, prefix="/api")
 app.include_router(address.router, prefix="/api")
 app.include_router(endpoints.router, prefix="/api")
 
+
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+    path = './app/configs/favicon/favicon.png'
+    return FileResponse(path)
 
 # @app.get("/")
 # def root():
