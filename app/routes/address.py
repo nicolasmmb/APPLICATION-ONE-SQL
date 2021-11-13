@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.models.models import Address, User
 from app.schemas.schemas import AddressCreate, AddressUpdate, AddressGet
 from app.database.database import get_db
-from app.routes import oauth2
+from app.routes import oauth
 # Utils
 from app.utils import utils
 import time
@@ -17,7 +17,7 @@ router = APIRouter(
 
 
 @router.post('/create', response_model=AddressCreate, status_code=status.HTTP_201_CREATED)
-async def create_address(address: AddressCreate, db: Session = Depends(get_db), user_data: any = Depends(oauth2.get_user)):
+async def create_address(address: AddressCreate, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     try:
         to_address_encode = address.dict().copy()
         to_address_encode.update({'user_id': user_data.id})
@@ -34,7 +34,7 @@ async def create_address(address: AddressCreate, db: Session = Depends(get_db), 
 
 
 @router.get('/get-all', status_code=status.HTTP_200_OK)
-async def get_addresss(db: Session = Depends(get_db), user_data: any = Depends(oauth2.get_user)):
+async def get_addresss(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     try:
         address = db.query(Address).all()
         return address
@@ -43,7 +43,7 @@ async def get_addresss(db: Session = Depends(get_db), user_data: any = Depends(o
 
 
 @router.get('/get-by-id/{id}', response_model=AddressGet, status_code=status.HTTP_200_OK)
-async def get_address_by_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth2.get_user)):
+async def get_address_by_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     address = db.query(Address).filter(Address.id == id).first()
     if not address:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Address not found")
@@ -52,7 +52,7 @@ async def get_address_by_id(id: int, db: Session = Depends(get_db), user_data: a
 
 
 @router.put('/update/{id}', response_model=AddressUpdate, status_code=status.HTTP_200_OK)
-async def update_address_by_id(id: int, address: AddressUpdate, db: Session = Depends(get_db), user_data: any = Depends(oauth2.get_user)):
+async def update_address_by_id(id: int, address: AddressUpdate, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     address_db = db.query(Address).filter(Address.id == id).first()
     if not address_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Address not found")
@@ -71,7 +71,7 @@ async def update_address_by_id(id: int, address: AddressUpdate, db: Session = De
 
 
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
-async def delete_address_by_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth2.get_user)):
+async def delete_address_by_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     address_db = db.query(Address).filter(Address.id == id)
     if not address_db.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Address not found")
@@ -82,6 +82,6 @@ async def delete_address_by_id(id: int, db: Session = Depends(get_db), user_data
 
 
 @router.get('/get-join/{id}', status_code=status.HTTP_200_OK)
-def get_address_by_user_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth2.get_user)):
+def get_address_by_user_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     join = db.query(Address, User).join(User).filter(Address.user_id == id).all()
     return join

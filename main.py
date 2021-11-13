@@ -1,10 +1,12 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response, status, Depends
 from fastapi.middleware.cors import CORSMiddleware
 # ///
 from app.configs.config import DatabaseConfig
 # Routes
 from app.routes import user, address, auth
 from app.utils import endpoints
+# AUTH0
+from fastapi.security import HTTPBearer
 
 
 app = FastAPI()

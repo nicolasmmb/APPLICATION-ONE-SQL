@@ -7,7 +7,7 @@ from app.models import models
 from app.utils import utils
 ###
 import time
-from app.routes import oauth2
+from app.routes import oauth
 
 router = APIRouter(tags=['Authentication'])
 
@@ -32,7 +32,7 @@ async def login(user_credentials: schemas.UserLogin, db: Session = Depends(datab
     if not utils.verify(user_credentials.senha, user.senha):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid Credentials")
 
-    auth = oauth2.create_token({"user_id": user.id})
+    auth = oauth.create_token({"user_id": user.id})
 
     return {
         "token": auth,

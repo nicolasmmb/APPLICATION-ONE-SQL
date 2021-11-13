@@ -62,5 +62,13 @@ class TokenConfig:
         }
 
 
-if __name__ == "__main__":
-    print(DatabaseConfig().get_url_connection())
+class auth0:
+
+    @staticmethod
+    def get_auth0_config() -> dict:
+        return {
+            'ISSUER': os.getenv('ISSUER'),
+            'API_AUDIENCE': os.getenv('API_AUDIENCE'),
+            'DOMAIN_AUTH0': os.getenv('DOMAIN_AUTH0'),
+            'ALGORITHM_AUTH0': os.getenv('ALGORITHM_AUTH0')
+        }

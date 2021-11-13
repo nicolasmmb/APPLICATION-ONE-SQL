@@ -6,7 +6,7 @@ from app.schemas.schemas import UserCreate, UserUpdate, UserGet
 from app.database.database import get_db
 # Utils
 from app.utils import utils
-from app.routes import oauth2
+from app.routes import oauth
 import time
 
 router = APIRouter(
@@ -30,7 +30,7 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.get('/get-all', status_code=status.HTTP_200_OK)
-async def get_users(db: Session = Depends(get_db), user_data: any = Depends(oauth2.get_user)):
+async def get_users(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     try:
         users = db.query(User).all()
         return users
@@ -39,7 +39,7 @@ async def get_users(db: Session = Depends(get_db), user_data: any = Depends(oaut
 
 
 @router.get('/get-by-id/{id}', response_model=UserGet, status_code=status.HTTP_200_OK)
-async def get_user_by_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth2.get_user)):
+async def get_user_by_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
 
     user = db.query(User).filter(User.id == id).first()
     if not user:
@@ -49,7 +49,7 @@ async def get_user_by_id(id: int, db: Session = Depends(get_db), user_data: any 
 
 
 @router.put('/update/{id}', response_model=UserUpdate, status_code=status.HTTP_200_OK)
-async def update_user_by_id(id: int, user: UserUpdate, db: Session = Depends(get_db), user_data: any = Depends(oauth2.get_user)):
+async def update_user_by_id(id: int, user: UserUpdate, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     user_db = db.query(User).filter(User.id == id).first()
 
     if not user_db:
@@ -65,7 +65,7 @@ async def update_user_by_id(id: int, user: UserUpdate, db: Session = Depends(get
 
 
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
-async def delete_user_by_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth2.get_user)):
+async def delete_user_by_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     user_db = db.query(User).filter(User.id == id)
 
     if not user_db.first():
