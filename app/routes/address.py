@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.models.models import Address, User
 from app.schemas.schemas import AddressCreate, AddressUpdate, AddressGet
 from app.database.database import get_db
-from app.routes import oauth
+from app.utils import oauth
 # Utils
 from app.utils import utils
 import time

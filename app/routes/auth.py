@@ -7,7 +7,7 @@ from app.models import models
 from app.utils import utils
 ###
 import time
-from app.routes import oauth
+from app.utils import oauth
 
 router = APIRouter(tags=['Authentication'])
 

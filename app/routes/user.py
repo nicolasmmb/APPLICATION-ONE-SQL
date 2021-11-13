@@ -6,7 +6,7 @@ from app.schemas.schemas import UserCreate, UserUpdate, UserGet
 from app.database.database import get_db
 # Utils
 from app.utils import utils
-from app.routes import oauth
+from app.utils import oauth
 import time
 
 router = APIRouter(
