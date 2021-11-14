@@ -37,7 +37,7 @@ async def favicon():
     return FileResponse(path)
 
 
-@app.get('/')
+@app.get('/', include_in_schema=False)
 def index():
     # Not indicated to create the database using this way,
     # Only for demonstration purposes
