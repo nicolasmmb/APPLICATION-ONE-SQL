@@ -1,16 +1,16 @@
-from fastapi import FastAPI, Request, Response, status, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# ///
-from app.configs.config import DatabaseConfig
+from fastapi.responses import RedirectResponse
 # Routes
 from app.routes import user, address, auth
 from app.utils import endpoints
-# AUTH0
-from fastapi.security import HTTPBearer
 ###
 from starlette.responses import FileResponse
+###
+import subprocess
 
 
+# APP CONFIG
 app = FastAPI()
 
 origins = ["*"]
@@ -23,17 +23,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ROUTES
 app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/api")
 app.include_router(address.router, prefix="/api")
 app.include_router(endpoints.router, prefix="/api")
 
 
+# ROUTE
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
     path = './app/configs/favicon/favicon.png'
     return FileResponse(path)
 
-# @app.get("/")
-# def root():
-#     return {"message": DatabaseConfig().get_url_connection()}
+
+@app.get('/')
+def index():
+    # Not indicated to create the database using this way,
+    # Only for demonstration purposes
+
+    # TRY CREATE A DATABASE
+    subprocess.run(["alembic", "upgrade", "48fa24973d26"])
+
+    return RedirectResponse("/docs")
