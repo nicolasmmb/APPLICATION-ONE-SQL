@@ -16,7 +16,7 @@ router = APIRouter(
 )
 
 
-@router.post('/create', response_model=AddressCreate, status_code=status.HTTP_201_CREATED, tags=['MY-ADDRESS'])
+@router.post('/create', response_model=AddressCreate, status_code=status.HTTP_201_CREATED, tags=['ADDRESS-AUTO'])
 async def create_address(address: AddressCreate, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     print('user_data: '.upper() + str(user_data.id))
 
@@ -61,7 +61,7 @@ async def get_address_by_id(id: int, db: Session = Depends(get_db), user_data: a
     return address
 
 
-@router.get('/get-my-info', response_model=AddressGet, status_code=status.HTTP_200_OK, tags=['MY-ADDRESS'])
+@router.get('/get-my-info', response_model=AddressGet, status_code=status.HTTP_200_OK, tags=['ADDRESS-AUTO'])
 async def get_address_by_id(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     address = db.query(Address).filter(Address.id == user_data.id).first()
     if not address:
@@ -90,7 +90,7 @@ async def update_address_by_id(id: int, address: AddressUpdate, db: Session = De
     return address_db
 
 
-@router.patch('/update-my-address', response_model=AddressUpdate, status_code=status.HTTP_200_OK, tags=['MY-ADDRESS'])
+@router.patch('/update-my-address', response_model=AddressUpdate, status_code=status.HTTP_200_OK, tags=['ADDRESS-AUTO'])
 async def update_my_address(address: AddressUpdate, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     address_db = db.query(Address).filter(Address.id == user_data.id).first()
 
@@ -121,7 +121,7 @@ async def delete_address_by_id(id: int, db: Session = Depends(get_db), user_data
     return {"detail": "Address deleted"}
 
 
-@router.delete('/delete-my-address', status_code=status.HTTP_200_OK, tags=['MY-ADDRESS'])
+@router.delete('/delete-my-address', status_code=status.HTTP_200_OK, tags=['ADDRESS-AUTO'])
 async def delete_my_address(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     address_db = db.query(Address).filter(Address.id == user_data.id)
     if not address_db.first():
