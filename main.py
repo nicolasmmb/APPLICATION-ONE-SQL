@@ -11,7 +11,16 @@ import subprocess
 
 
 # APP CONFIG
-app = FastAPI()
+app = FastAPI(
+    title="APP-ONE-SQL-API",
+    version="1.0.5",
+    contact={
+        "name": "Nícolas Marques de Moura Barbosa",
+        "url": "https://www.linkedin.com/in/nicolasmmb/",
+        "email": "nicolas.mmb@hotmail.com",
+    },
+
+)
 
 origins = ["*"]
 

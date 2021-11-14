@@ -29,11 +29,15 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e.__cause__))
 
 
-@router.get('/get-all', status_code=status.HTTP_200_OK, tags=['USERS'])
-async def get_users(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
+@router.get('/get-all/', status_code=status.HTTP_200_OK, tags=['USERS'])
+async def get_users(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user), limit: int = None):
     try:
-        users = db.query(User).all()
+        if limit:
+            users = db.query(User).filter().limit(limit).all()
+        else:
+            users = db.query(User).all()
         return users
+
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e.__cause__))
 
@@ -48,10 +52,32 @@ async def get_user_by_id(id: int, db: Session = Depends(get_db), user_data: any 
     return user
 
 
-@router.get('/get-complete-info', status_code=status.HTTP_200_OK, tags=['USERS'])
-def get_users_with_address_associated(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
-    join = db.query(User, Address).join(Address).filter(Address.user_id == user_data.id).all()
+@router.get('/get-my-info',  status_code=status.HTTP_200_OK, tags=['MY-USER'])
+async def get_my_complete_user_info(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
+    join = db.query(User, Address).join(Address).filter(User.id == user_data.id).first()
+
+    if not join:
+        user = db.query(User).filter(User.id == user_data.id).first()
+        return user
+
+        if not user:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found - User")
+
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found - Joins")
+
     return join
+
+
+@router.get('/get-complete-info', status_code=status.HTTP_200_OK, tags=['USERS'])
+def get_users_with_address_associated(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user), limit: int = None):
+    try:
+        if limit:
+            join = join = db.query(User, Address).join(Address).limit(limit).all()
+        else:
+            join = join = db.query(User, Address).join(Address).all()
+        return join
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e.__cause__))
 
 
 @router.patch('/update/{id}', response_model=UserUpdate, status_code=status.HTTP_200_OK, tags=['USERS'])

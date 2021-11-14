@@ -12,11 +12,11 @@ import time
 
 router = APIRouter(
     prefix="/address",
-    #tags=['ADDRESS']
+    # tags=['ADDRESS']
 )
 
 
-@router.post('/create', response_model=AddressCreate, status_code=status.HTTP_201_CREATED, tags=['ADDRESS'])
+@router.post('/create', response_model=AddressCreate, status_code=status.HTTP_201_CREATED, tags=['MY-ADDRESS'])
 async def create_address(address: AddressCreate, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     print('user_data: '.upper() + str(user_data.id))
 
@@ -40,10 +40,14 @@ async def create_address(address: AddressCreate, db: Session = Depends(get_db), 
 
 
 @router.get('/get-all', status_code=status.HTTP_200_OK, tags=['ADDRESS'])
-async def get_addresss(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
+async def get_address(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user), limit: int = None):
     try:
-        address = db.query(Address).all()
+        if limit:
+            address = db.query(Address).filter().limit(limit).all()
+        else:
+            address = db.query(Address).all()
         return address
+
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e.__cause__))
 
@@ -51,6 +55,15 @@ async def get_addresss(db: Session = Depends(get_db), user_data: any = Depends(o
 @router.get('/get-by-id/{id}', response_model=AddressGet, status_code=status.HTTP_200_OK, tags=['ADDRESS'])
 async def get_address_by_id(id: int, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     address = db.query(Address).filter(Address.id == id).first()
+    if not address:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Address not found")
+
+    return address
+
+
+@router.get('/get-my-info', response_model=AddressGet, status_code=status.HTTP_200_OK, tags=['MY-ADDRESS'])
+async def get_address_by_id(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
+    address = db.query(Address).filter(Address.id == user_data.id).first()
     if not address:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Address not found")
 
