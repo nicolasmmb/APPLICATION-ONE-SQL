@@ -65,4 +65,8 @@ def get_user(token: str = Depends(auth_scheme), db: Session = Depends(get_db)):
 
     token = decode_token(token.credentials, exeption)
     user_id = db.query(User).filter(User.id == token.user_id).first()
+
+    if not user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credentials Error")
+
     return user_id

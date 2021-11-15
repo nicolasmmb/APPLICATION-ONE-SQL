@@ -8,14 +8,14 @@ services:
     depends_on:
       - postgres
     ports:
-      - 3000:8000
+      - 3002:8002
     command:
       - "uvicorn"
       - "main:app"
       - "--host"
       - "0.0.0.0"
       - "--port"
-      - "8000"
+      - "8002"
 
     environment:
       # DB
@@ -38,7 +38,7 @@ services:
   postgres:
     image: postgres:11.5
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - ./db/postgres:/var/lib/postgresql/data
 
     # Commit this ports for close access to the database
     ports:

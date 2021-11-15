@@ -62,7 +62,7 @@ async def get_address_by_id(id: int, db: Session = Depends(get_db), user_data: a
 
 
 @router.get('/get-my-info', response_model=AddressGet, status_code=status.HTTP_200_OK, tags=['ADDRESS-AUTO'])
-async def get_address_by_id(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
+async def get_my_address(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     address = db.query(Address).filter(Address.id == user_data.id).first()
     if not address:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Address not found")

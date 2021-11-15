@@ -14,11 +14,19 @@ router = APIRouter(
     # tags=['USERS']
 )
 
+
 fields = [User.id, User.nome, User.email, User.cpf, User.pis]
 
 
 @router.post('/create', response_model=UserCreate, status_code=status.HTTP_201_CREATED, tags=['USERS'])
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
+
+    if not utils.Validator.validateCPF(cpf=user.cpf):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="CPF Is Not Valid")
+
+    if not utils.Validator.validatePIS(pis=user.pis):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="PIS Is Not Valid")
+
     try:
         pass_hashed = utils.hash(password=user.senha)
         user.senha = pass_hashed
@@ -56,7 +64,7 @@ async def get_user_by_id(id: int, db: Session = Depends(get_db), user_data: any 
 
 
 @router.get('/get-my-info',  status_code=status.HTTP_200_OK, tags=['USER-AUTO'])
-async def get_my_complete_user_info(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
+async def get_my_user(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
 
     join = db.query(User, Address).join(Address).filter(User.id == user_data.id).values(*fields, Address)
 
@@ -87,6 +95,12 @@ def get_users_with_address_associated(db: Session = Depends(get_db), user_data: 
 @router.patch('/update/{id}', response_model=UserUpdate, status_code=status.HTTP_200_OK, tags=['USERS'])
 async def update_user_by_id(id: int, user: UserUpdate, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
 
+    if not utils.Validator.validateCPF(cpf=user.cpf):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="CPF Is Not Valid")
+
+    if not utils.Validator.validatePIS(pis=user.pis):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="PIS Is Not Valid")
+
     user_db = db.query(User).filter(User.id == id).first()
 
     if not user_db:
@@ -103,6 +117,12 @@ async def update_user_by_id(id: int, user: UserUpdate, db: Session = Depends(get
 
 @router.patch('/update-my-user', response_model=UserUpdate, status_code=status.HTTP_200_OK, tags=['USER-AUTO'])
 async def update_my_user(user: UserUpdate, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
+
+    if not utils.Validator.validateCPF(cpf=user.cpf):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="CPF Is Not Valid")
+
+    if not utils.Validator.validatePIS(pis=user.pis):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="PIS Is Not Valid")
 
     user_db = db.query(User).filter(User.id == user_data.id).first()
 
@@ -132,7 +152,7 @@ async def delete_user_by_id(id: int, db: Session = Depends(get_db), user_data: a
 
 
 @router.delete('/delete-my-user', status_code=status.HTTP_200_OK, tags=['USER-AUTO'])
-async def delete_user_by_id(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
+async def delete_my_user(db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
     user_db = db.query(User).filter(User.id == user_data.id)
 
     if not user_db.first():
