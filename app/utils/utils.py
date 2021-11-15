@@ -15,6 +15,10 @@ def verify(plain_password, hashed_password):
 
 class Validator:
     @staticmethod
+    def only_number(value):
+        return re.sub('\D', '', value.replace('.', '').replace('-', ''))
+
+    @staticmethod
     def validateCPF(cpf):
         cpf = re.sub('\D', '', cpf.replace('.', '').replace('-', ''))
 

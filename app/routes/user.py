@@ -28,6 +28,9 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="PIS Is Not Valid")
 
     try:
+        user.cpf = utils.Validator.only_number(user.cpf)
+        user.pis = utils.Validator.only_number(user.pis)
+        
         pass_hashed = utils.hash(password=user.senha)
         user.senha = pass_hashed
         new_user = User(**user.dict())
@@ -106,6 +109,8 @@ async def update_user_by_id(id: int, user: UserUpdate, db: Session = Depends(get
     if not user_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
+    user.cpf = utils.Validator.only_number(user.cpf)
+    user.pis = utils.Validator.only_number(user.pis)
     user_db.nome = user.nome if user.nome else user_db.nome
     user_db.email = user.email if user.email else user_db.email
     user_db.cpf = user.cpf if user.cpf else user_db.cpf
@@ -129,6 +134,8 @@ async def update_my_user(user: UserUpdate, db: Session = Depends(get_db), user_d
     if not user_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
+    user.cpf = utils.Validator.only_number(user.cpf)
+    user.pis = utils.Validator.only_number(user.pis)
     user_db.nome = user.nome if user.nome else user_db.nome
     user_db.email = user.email if user.email else user_db.email
     user_db.cpf = user.cpf if user.cpf else user_db.cpf
