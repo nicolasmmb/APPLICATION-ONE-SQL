@@ -8,22 +8,6 @@ import os
 
 load_dotenv()
 
-# class Settings(BaseSettings):
-#     database_hostname: str
-#     database_port: str
-#     database_password: str
-#     database_name: str
-#     database_username: str
-#     secret_key: str
-#     algorithm: str
-#     access_token_expire_minutes: int
-
-#     class Config:
-#         env_file = ".env"
-
-
-# settings = Settings()
-
 
 class DatabaseConfig:
     def __init__(self):
@@ -59,16 +43,4 @@ class TokenConfig:
             'SECRET_KEY': os.getenv('SECRET_KEY'),
             'ALGORITHM': os.getenv('ALGORITHM'),
             'TOKEN_EXPIRE_MINUTES': os.getenv('TOKEN_EXPIRE_MINUTES')
-        }
-
-
-class auth0:
-
-    @staticmethod
-    def get_auth0_config() -> dict:
-        return {
-            'ISSUER': os.getenv('ISSUER'),
-            'API_AUDIENCE': os.getenv('API_AUDIENCE'),
-            'DOMAIN_AUTH0': os.getenv('DOMAIN_AUTH0'),
-            'ALGORITHM_AUTH0': os.getenv('ALGORITHM_AUTH0')
         }

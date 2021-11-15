@@ -18,7 +18,6 @@ router = APIRouter(
 
 @router.post('/create', response_model=AddressCreate, status_code=status.HTTP_201_CREATED, tags=['ADDRESS-AUTO'])
 async def create_address(address: AddressCreate, db: Session = Depends(get_db), user_data: any = Depends(oauth.get_user)):
-    print('user_data: '.upper() + str(user_data.id))
 
     address_exists = db.query(Address).filter(Address.user_id == user_data.id).first()
     if address_exists:
