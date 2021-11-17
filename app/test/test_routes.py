@@ -20,6 +20,7 @@ def return_token() -> str:
 
     response = client.post("/auth/login", json=model_body)
     token_auth = response.json().get("token")
+
     return token_auth
 
 
@@ -44,11 +45,13 @@ def test_get_token():
 
     response = client.post("/auth/login", json=model_body)
     token_auth = response.json().get("token")
-    assert response.status_code == 200 or 400
+
+    assert response.status_code == 200
 
 
 def test_users_get_all():
     response = client.get("/api/users/get-all/", headers={"Authorization": f"Bearer {return_token()}"})
+
     assert response.status_code == 200
     assert len(response.json()) > 0
 
@@ -67,7 +70,9 @@ def test_users_get_all():
 
 def test_get_complete_info():
     response = client.get("/api/users/get-complete-info", headers={"Authorization": f"Bearer {return_token()}"})
+
     assert response.status_code == 200
+    pass
 
 
 def test_update_my_user():
@@ -86,13 +91,7 @@ def test_update_my_user():
     assert response.json().get("pis") == "00357651588"
 
     assert response.status_code == 200
-
-
-# def test_delete_user_my_user():
-#     response = client.delete("/api/users/delete-my-user", headers={"Authorization": f"Bearer {return_token()}"})
-#     print(response.json())
-#     assert response.status_code == 200
-#     assert response.json().get("detail") == "User deleted"
+    pass
 
 
 def test_create_address():
@@ -108,13 +107,16 @@ def test_create_address():
     }
 
     response = client.post("/api/address/create", json=model_body, headers={"Authorization": f"Bearer {return_token()}"})
+
     assert response.status_code == 201
+    pass
 
 
 def test_get_my_address():
     response = client.get("/api/address/get-my-info", headers={"Authorization": f"Bearer {return_token()}"})
-    print(response.json())
+
     assert response.status_code == 200
+    pass
 
 
 def test_update_my_address():
@@ -130,7 +132,7 @@ def test_update_my_address():
     }
 
     response = client.patch("/api/address/update-my-address", json=model_body, headers={"Authorization": f"Bearer {return_token()}"})
-    print(response.json())
+
     assert response.status_code == 200
     assert response.json().get("pais") == "BR"
     assert response.json().get("estado") == "SP"
@@ -139,3 +141,27 @@ def test_update_my_address():
     assert response.json().get("rua") == "R. Agripino Lopes de Moraes"
     assert response.json().get("numero") == 450
     assert response.json().get("complemento") == "Hospital"
+    pass
+
+
+def test_get_all_address():
+    response = client.get("/api/address/get-all", headers={"Authorization": f"Bearer {return_token()}"})
+
+    assert response.status_code == 200
+    assert len(response.json()) > 0
+    pass
+
+
+def test_delete_my_address():
+    response = client.delete("/api/address/delete-my-address", headers={"Authorization": f"Bearer {return_token()}"})
+
+    assert response.status_code == 200
+    pass
+
+
+def test_delete_user_my_user():
+    response = client.delete("/api/users/delete-my-user", headers={"Authorization": f"Bearer {return_token()}"})
+
+    assert response.status_code == 200
+    assert response.json().get("detail") == "User deleted"
+    pass
