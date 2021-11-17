@@ -8,6 +8,7 @@ from app.utils import endpoints
 from starlette.responses import FileResponse
 ###
 import subprocess
+import os
 
 
 # APP CONFIG
@@ -52,6 +53,6 @@ def index():
     # Only for demonstration purposes
 
     # TRY CREATE A DATABASE
-    subprocess.run(["alembic", "upgrade", "48fa24973d26"])
-
+    #subprocess.run(["alembic", "upgrade", "48fa24973d26"])
+    os.system("alembic upgrade 48fa24973d26")
     return RedirectResponse("/docs")
