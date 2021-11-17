@@ -27,10 +27,13 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     if not utils.Validator.validatePIS(pis=user.pis):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="PIS Is Not Valid")
 
+    if not utils.Validator.validateEMAIL(email=user.email):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email Is Not Valid")
+
     try:
         user.cpf = utils.Validator.only_number(user.cpf)
         user.pis = utils.Validator.only_number(user.pis)
-        
+
         pass_hashed = utils.hash(password=user.senha)
         user.senha = pass_hashed
         new_user = User(**user.dict())
@@ -104,6 +107,9 @@ async def update_user_by_id(id: int, user: UserUpdate, db: Session = Depends(get
     if not utils.Validator.validatePIS(pis=user.pis):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="PIS Is Not Valid")
 
+    if not utils.Validator.validateEMAIL(email=user.email):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email Is Not Valid")
+
     user_db = db.query(User).filter(User.id == id).first()
 
     if not user_db:
@@ -128,6 +134,9 @@ async def update_my_user(user: UserUpdate, db: Session = Depends(get_db), user_d
 
     if not utils.Validator.validatePIS(pis=user.pis):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="PIS Is Not Valid")
+
+    if not utils.Validator.validateEMAIL(email=user.email):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email Is Not Valid")
 
     user_db = db.query(User).filter(User.id == user_data.id).first()
 

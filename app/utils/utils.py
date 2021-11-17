@@ -19,7 +19,7 @@ class Validator:
         return re.sub('\D', '', value.replace('.', '').replace('-', ''))
 
     @staticmethod
-    def validateCPF(cpf):
+    def validateCPF(cpf) -> bool:
         cpf = re.sub('\D', '', cpf.replace('.', '').replace('-', ''))
 
         if not cpf:
@@ -57,7 +57,7 @@ class Validator:
         return True
 
     @staticmethod
-    def validatePIS(pis):
+    def validatePIS(pis) -> bool:
         pis = re.sub('\D', '', pis.replace('.', '').replace('-', ''))
 
         if not pis:
@@ -86,10 +86,15 @@ class Validator:
 
         return True
 
+    @staticmethod
+    def validateEMAIL(email) -> bool:
+        email = email.lower()
+        # ^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$
+        if re.search('^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$', email):
+            return True
+        else:
+            return False
 
-if __name__ == '__main__':
-    print('PIS: ' + str(Validator.validatePIS('722.5189305-4')))  # TRUE
-    print('CPF: ' + str(Validator.validateCPF('490.027.928-59')))  # TRUE
 
-    print('PIS: ' + str(Validator.validatePIS('722.5189305-9')))  # FALSE
-    print('CPF: ' + str(Validator.validateCPF('490.027.928-58')))  # FALSE
+if __name__ == "__main__":
+    print(Validator.validateEMAIL('nicolas.mmb@br.com'))
