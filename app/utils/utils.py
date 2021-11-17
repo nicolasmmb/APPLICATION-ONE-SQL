@@ -94,7 +94,3 @@ class Validator:
             return True
         else:
             return False
-
-
-if __name__ == "__main__":
-    print(Validator.validateEMAIL('nicolas.mmb@br.com'))
