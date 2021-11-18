@@ -89,7 +89,7 @@ Para alguns a API pode funcionar como **Magica** 🧙‍♂️, porem para uma E
 >>  [HEROKU -  https://app-one-sql.herokuapp.com/](https://app-one-sql.herokuapp.com/)
 >
 >>  [LOCALHOST - http://localhost:3002/](http://localhost:3002/)
-> 1. Os testes poderão ser realizados direto na documentação da API já que foi utilizado o Swagger, porem tambem é possivel realizar os teste utilizando o Postman ou outros.
+> 1. Os testes poderem ser realizados direto na documentação da API já que foi utilizado o Swagger, porem tambem é possivel realizar os teste utilizando o Postman ou outros.
 >>  ![](https://raw.githubusercontent.com/nicolasmmb/saved-images/main/telponto/CAP2.png) 
 > ---
 > 
