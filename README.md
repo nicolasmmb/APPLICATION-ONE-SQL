@@ -8,7 +8,7 @@
 
 ## :round_pushpin: Introdução
 
-Para alguns a API pode funcionar como **Magica** 🧙‍♂️, porem para uma Empresa como a HVEX, é necessario que todo o **TIME de DESENVOLVIMENTO** tenha noção do como Funciona a API e todos os Processos e Requistos estejam Documentados tanto para possiveis Auditorias quanto para o própio entendimento do **TIME**, para que enfrente menos desafios durante o desenvolvimento.
+É necessario que todo o **TIME de DESENVOLVIMENTO** tenha noção do Funcionamento da API e todos os Processos e Requistos estejam Documentados tanto para possíveis Auditorias quanto para o própio entendimento do **TIME**. Essa é uma documentação inicial para suporte ao desenvolvimento da API.
 
 ----
 ----
